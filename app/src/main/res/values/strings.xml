@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">TimelineNextFarm</string>
+    <string name="code">Mã khách hàng</string>
+    <string name="user">Tài khoản</string>
+    <string name="pass">Mật khẩu</string>
+    <string name="forgotPass">Quên mật khẩu</string>
+    <string name="login">Đăng nhập</string>
+    <string name="timeLine">Timeline - Nextfarm</string>
+    <string name="status">What on your mind?</string>
+    <string name="viewmore">View more</string>
+    <string name="showless">Show less</string>
+</resources>
