@@ -7,5 +7,7 @@
     <color name="redbottom">#602C58</color>
     <color name="green">#249B43</color>
     <color name="greenItem">#2D944C</color>
-    <color name="gray">#EBEEE9</color>
+    <color name="gray1">#EBEEE9</color>
+    <color name="gray">#A3A2A3</color>
+    <color name="blue">#3784FF</color>
 </resources>

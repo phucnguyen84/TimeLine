@@ -31,7 +31,7 @@ public class LoginSuccess extends AppCompatActivity {
         setContentView(R.layout.activity_login_success);
         addControls();
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));
-        postAdapter = new PostAdapter(recyclerView1,this,mDatums);
+        postAdapter = new PostAdapter(recyclerView1, this, mDatums);
         recyclerView1.setAdapter(postAdapter);
         addEvents();
 
@@ -47,12 +47,6 @@ public class LoginSuccess extends AppCompatActivity {
                 android.R.color.holo_green_dark,
                 android.R.color.holo_orange_dark,
                 android.R.color.holo_blue_dark);
-//        imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(LoginSuccess.this,ImageAdd.class));
-//            }
-//        });
     }
 
     private void addEvents() {
@@ -62,34 +56,34 @@ public class LoginSuccess extends AppCompatActivity {
         postAdapter.setLoadMore(new ILoadMore() {
             @Override
             public void OnLoadMore() {
-                if(mDatums.size()<10){
+                if (mDatums.size() < MainActivity.DisplayData.size()) {
                     mDatums.add(null);
-                    postAdapter.notifyItemInserted(mDatums.size()-1);
+                    postAdapter.notifyItemInserted(mDatums.size() - 1);
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            mDatums.remove(mDatums.size()-1);
+                            mDatums.remove(mDatums.size() - 1);
                             postAdapter.notifyItemRemoved(mDatums.size());
 
-                            int index=mDatums.size();
-                            int end=index+1;
-                            for (int i = index; i < end; i++) {
-                                if(i<10){
+                            int index = mDatums.size();
+                            int end = index + 1;
+                            if (end <= MainActivity.DisplayData.size()) {
+                                for (int i = index; i < end; i++) {
                                     mDatums.add(MainActivity.DisplayData.get(i));
                                 }
                             }
                             postAdapter.notifyDataSetChanged();
                             postAdapter.setLoaded();
                         }
-                    },3000);
+                    }, 3000);
                 }
             }
         });
     }
 
     private void addControls() {
-        recyclerView1 =findViewById(R.id.recyclerView);
-        swipeRefreshLayout=findViewById(R.id.swipeContainer);
-        imageView=findViewById(R.id.imgPost3);
+        recyclerView1 = findViewById(R.id.recyclerView);
+        swipeRefreshLayout = findViewById(R.id.swipeContainer);
+        imageView = findViewById(R.id.imgPost33);
     }
 }

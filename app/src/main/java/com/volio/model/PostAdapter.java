@@ -2,15 +2,11 @@ package com.volio.model;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,7 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.volio.model.entity2.Datum;
-import com.volio.model.entity2.Pest;
+import com.volio.model.entity3.Datum2;
+import com.volio.presenter.MainPresenter;
+import com.volio.view.CommentActivity;
+import com.volio.view.CommentView;
 import com.volio.view.ImageAdd;
 import com.volio.view.R;
 
@@ -27,15 +26,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-class LoadingViewHolder extends RecyclerView.ViewHolder
-{
+class LoadingViewHolder extends RecyclerView.ViewHolder {
 
     public ProgressBar progressBar;
 
@@ -45,67 +43,72 @@ class LoadingViewHolder extends RecyclerView.ViewHolder
     }
 }
 
-class ItemViewHolder extends RecyclerView.ViewHolder{
+class ItemViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView txtUser,txtTime,txtPost,txtLike,txtCmt,txtPostAdd,txt;
-    public LinearLayout btnLike,btnCmt;
-    public ImageView btnLiked,imgUser,imgPost1,imgPost2,imgPost3,imgPost21,imgPost22;
+    public TextView txtUser, txtTime, txtPost, txtLike, txtCmt, txtPostAdd;
+    public LinearLayout btnLike, btnCmt;
+    public ImageView btnLiked, imgUser, imgPost11, imgPost31, imgPost32, imgPost33, imgPost21, imgPost22;
     public RecyclerView recyclerView;
-    public List<Pest> mPests=new ArrayList<>();
-
-
+    public LinearLayout ll1, ll2, ll3;
 
     public ItemViewHolder(View itemView) {
         super(itemView);
-        txtUser=itemView.findViewById(R.id.txtUser);
-        txtTime=itemView.findViewById(R.id.txtTime);
-        txtPost=itemView.findViewById(R.id.txtPost);
-        txtLike=itemView.findViewById(R.id.txtLike);
-        txtCmt=itemView.findViewById(R.id.txtCmt);
-        btnLike=itemView.findViewById(R.id.btnLike);
-        btnCmt=itemView.findViewById(R.id.btnCmt);
-        btnLiked=itemView.findViewById(R.id.btnLiked);
-        imgUser=itemView.findViewById(R.id.imgUser);
-        imgPost1=itemView.findViewById(R.id.imgPost1);
-        imgPost2=itemView.findViewById(R.id.imgPost2);
-        imgPost3=itemView.findViewById(R.id.imgPost3);
-        recyclerView=itemView.findViewById(R.id.recyclerView2);
-        txtPostAdd=itemView.findViewById(R.id.txtPostAdd);
-        imgPost21=itemView.findViewById(R.id.imgPost21);
-        imgPost22=itemView.findViewById(R.id.imgPost22);
-        txt=itemView.findViewById(R.id.txt);
+        txtUser = itemView.findViewById(R.id.txtUser);
+        txtTime = itemView.findViewById(R.id.txtTime);
+        txtPost = itemView.findViewById(R.id.txtPost);
+        txtLike = itemView.findViewById(R.id.txtLike);
+        txtCmt = itemView.findViewById(R.id.txtCmt);
+        btnLike = itemView.findViewById(R.id.btnLike);
+        btnCmt = itemView.findViewById(R.id.btnCmt);
+        btnLiked = itemView.findViewById(R.id.btnLiked);
+        imgUser = itemView.findViewById(R.id.imgUser);
+        imgPost11 = itemView.findViewById(R.id.imgPost11);
+        imgPost31 = itemView.findViewById(R.id.imgPost31);
+        imgPost32 = itemView.findViewById(R.id.imgPost32);
+        imgPost33 = itemView.findViewById(R.id.imgPost33);
+        recyclerView = itemView.findViewById(R.id.recyclerView2);
+        txtPostAdd = itemView.findViewById(R.id.txtPostAdd);
+        imgPost21 = itemView.findViewById(R.id.imgPost21);
+        imgPost22 = itemView.findViewById(R.id.imgPost22);
+        ll1 = itemView.findViewById(R.id.ll1);
+        ll2 = itemView.findViewById(R.id.ll2);
+        ll3 = itemView.findViewById(R.id.ll3);
     }
 }
 
-public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements CommentView {
+    private MainPresenter mainPresenter;
+    public static ArrayList<Datum2> DataCmt;
 
-    PestAdapter pestAdapter;
+    public PestAdapter pestAdapter;
+    public String[] img = new String[100];
+    public static String refer_id;
+    public static String pageLimit;
 
-    public static String img_Post="";
 
+    public static String img_Post = "";
 
-    private final int VIEW_TYPE_ITEM=0,VIEW_TYPE_LOADING=1;
+    private final int VIEW_TYPE_ITEM = 0, VIEW_TYPE_LOADING = 1;
     ILoadMore loadMore;
-    boolean isLoading=false;
+    boolean isLoading = false;
     Context context;
     ArrayList<Datum> items;
-    int visibleThreshold=5;
-    int lastVisibleItem,totalItemCount;
+    int visibleThreshold = 5;
+    int lastVisibleItem, totalItemCount;
 
     public PostAdapter(RecyclerView recyclerView, Context context, ArrayList<Datum> items) {
         this.context = context;
         this.items = items;
 
-        final LinearLayoutManager linearLayoutManager = (LinearLayoutManager)recyclerView.getLayoutManager();
+        final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 totalItemCount = linearLayoutManager.getItemCount();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                if(!isLoading && totalItemCount <= (lastVisibleItem+visibleThreshold))
-                {
-                    if(loadMore != null)
+                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    if (loadMore != null)
                         loadMore.OnLoadMore();
                     isLoading = true;
                 }
@@ -116,7 +119,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return items.get(position) == null ? VIEW_TYPE_LOADING:VIEW_TYPE_ITEM;
+        return items.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     public void setLoadMore(ILoadMore loadMore) {
@@ -125,16 +128,13 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == VIEW_TYPE_ITEM)
-        {
+        if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(context)
-                    .inflate(R.layout.item,parent,false);
+                    .inflate(R.layout.item, parent, false);
             return new ItemViewHolder(view);
-        }
-        else if(viewType == VIEW_TYPE_LOADING)
-        {
+        } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(context)
-                    .inflate(R.layout.item_loading,parent,false);
+                    .inflate(R.layout.item_loading, parent, false);
             return new LoadingViewHolder(view);
         }
         return null;
@@ -143,92 +143,115 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
-        if(holder instanceof ItemViewHolder)
-        {
+        if (holder instanceof ItemViewHolder) {
             final Datum item = items.get(position);
             final ItemViewHolder viewHolder = (ItemViewHolder) holder;
-            viewHolder.txtUser.setText(items.get(position).getUser().getFirstname()+" "+items.get(position).getUser().getLastname());
-            viewHolder.txtTime.setText(items.get(position).getCreatedDate());
-            viewHolder.txtPost.setText(items.get(position).getContent());
-            String json_string=items.get(position).getImage();
-//            String json_string2=json_string.replace("\\","");
-            String json_string3="{"+"\"image\":"+json_string+"}"+"}";
+            Glide.with(context)
+                    .load(item.getUser().getPicture())
+                    .into(((ItemViewHolder) holder).imgUser);
+            viewHolder.txtUser.setText(item.getUser().getFirstname() + " " + item.getUser().getLastname());
+            Calendar calendar = Calendar.getInstance();
+            String givenDateString = item.getCreatedDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                Date mDate = sdf.parse(givenDateString);
+                String y = output.format(mDate);
+                long timeInMilliseconds = mDate.getTime();
+                long timeInMilliseconds2 = calendar.getTimeInMillis();
+                if (timeInMilliseconds2 - timeInMilliseconds <= 60000) {
+                    viewHolder.txtTime.setText("Just now");
+                } else if (timeInMilliseconds2 - timeInMilliseconds < 3600000) {
+                    viewHolder.txtTime.setText((int) (timeInMilliseconds2 - timeInMilliseconds) / 60000 + " Minutes ago");
+                } else if (timeInMilliseconds2 - timeInMilliseconds < 86400000) {
+                    viewHolder.txtTime.setText((int) (timeInMilliseconds2 - timeInMilliseconds) / 3600000 + " Hours ago");
+                } else {
+                    viewHolder.txtTime.setText(y);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            viewHolder.txtPost.setText(item.getContent());
+            String json_string = item.getImage();
+            String json_string3 = "{" + "\"image\":" + json_string + "}" + "}";
 
             try {
-
                 JSONObject root = new JSONObject(json_string3);
-                JSONArray array= root.getJSONArray("image");
-                if(array.length()==2){
-                        for(int i=0;i<array.length();i++)
-                        {
-                            JSONObject object= array.getJSONObject(i);
-                            if(i==0){
-                                Glide.with(context)
-                                        .load(object.getString("url"))
-                                        .into(viewHolder.imgPost21);
-                                viewHolder.imgPost21.getLayoutParams().height=500;
-                                viewHolder.txt.setText(object.getString("url"));
+                JSONArray array = root.getJSONArray("image");
+                setValue(json_string, array, viewHolder.ll1, viewHolder.ll2, viewHolder.ll3);
 
-                            }
-                            if(i==1){
-                                Glide.with(context)
-                                        .load(object.getString("url"))
-                                        .into(viewHolder.imgPost22);
-                                viewHolder.imgPost21.getLayoutParams().height=500;
-
-                            }
+                if (array.length() == 1) {
+                    JSONObject object = array.getJSONObject(0);
+                    Glide.with(context)
+                            .load(object.getString("url"))
+                            .into(viewHolder.imgPost11);
+                    viewHolder.imgPost11.getLayoutParams().height = 1000;
+                } else if (array.length() == 2) {
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject object = array.getJSONObject(i);
+                        if (i == 0) {
+                            Glide.with(context)
+                                    .load(object.getString("url"))
+                                    .into(viewHolder.imgPost21);
+                            viewHolder.imgPost21.getLayoutParams().height = 500;
                         }
-                }else{
-                    for(int i=0;i<array.length();i++)
-                    {
-                        JSONObject object= array.getJSONObject(i);
-                        if(i==0){
+                        if (i == 1) {
                             Glide.with(context)
                                     .load(object.getString("url"))
-                                    .into(viewHolder.imgPost1);
-                            viewHolder.imgPost1.getLayoutParams().height=1000;
-                            if(array.length()>3){
-                                img_Post=object.getString("url");
-                            }
-                        }else
-                        if(i==1){
-                            Glide.with(context)
-                                    .load(object.getString("url"))
-                                    .into(viewHolder.imgPost2);
-                        }else
-                        if(i==2){
-                            Glide.with(context)
-                                    .load(object.getString("url"))
-                                    .into(viewHolder.imgPost3);
+                                    .into(viewHolder.imgPost22);
+                            viewHolder.imgPost22.getLayoutParams().height = 500;
                         }
-                        if((i==array.length()-1)&&array.length()>3){
-                            int x=i-2;
-                            viewHolder.txtPostAdd.setText("+"+x);
+                    }
+                } else if (array.length() > 2) {
+                    for (int j = 0; j < array.length(); j++) {
+                        JSONObject object = array.getJSONObject(j);
+                        if (j == 0) {
+                            Glide.with(context)
+                                    .load(object.getString("url"))
+                                    .into(viewHolder.imgPost31);
+                            viewHolder.imgPost31.getLayoutParams().height = 1000;
+                            if (array.length() > 3) {
+                                img_Post = object.getString("url");
+                                img[position] = img_Post;
+                            }
+                        } else if (j == 1) {
+                            Glide.with(context)
+                                    .load(object.getString("url"))
+                                    .into(viewHolder.imgPost32);
+                        } else if (j == 2) {
+                            Glide.with(context)
+                                    .load(object.getString("url"))
+                                    .into(viewHolder.imgPost33);
+                        }
+                        if ((j == array.length() - 1) && array.length() > 3) {
+                            int x = j - 2;
+                            viewHolder.txtPostAdd.setText("+" + x);
                             viewHolder.txtPostAdd.setTextSize(40);
                         }
                     }
                 }
-                viewHolder.imgPost3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent=new Intent(context,ImageAdd.class);
-                        v.getContext().startActivity(intent);
-                    }
-                });
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            viewHolder.txtLike.setText(items.get(position).getCountLiked()+" Likes");
-            viewHolder.txtCmt.setText(items.get(position).getCountComments()+" Comment");
-            Glide.with(context)
-                    .load(item.getUser().getPicture())
-                    .into(((ItemViewHolder) holder).imgUser);
-            if(items.get(position).getLiked()==true){
+            if (json_string == null) {
+                hideViews(viewHolder.ll1, viewHolder.ll2, viewHolder.ll3);
+            }
+            viewHolder.txtPostAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    img_Post = img[position];
+                    Intent intent = new Intent(context, ImageAdd.class);
+                    v.getContext().startActivity(intent);
+                }
+            });
+            viewHolder.txtLike.setText(item.getCountLiked() + " Likes");
+            viewHolder.txtCmt.setText(item.getCountComments() + " CommentActivity");
+            if (item.getLiked() == true) {
                 Glide.with(context)
                         .load(R.drawable.liked)
                         .into(((ItemViewHolder) holder).btnLiked);
-            }else{
+            } else {
                 Glide.with(context)
                         .load(R.drawable.like)
                         .into(((ItemViewHolder) holder).btnLiked);
@@ -236,35 +259,112 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             viewHolder.btnLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(items.get(position).getLiked()==true){
-                        items.get(position).setLiked(false);
+                    if (item.getLiked() == true) {
+                        item.setLiked(false);
                         Glide.with(context)
                                 .load(R.drawable.like)
                                 .into(viewHolder.btnLiked);
-                        items.get(position).setCountLiked(items.get(position).getCountLiked()-1);
-                        viewHolder.txtLike.setText(items.get(position).getCountLiked()+" Likes");
-                    }else{
-                        items.get(position).setLiked(true);
+                        item.setCountLiked(item.getCountLiked() - 1);
+                        viewHolder.txtLike.setText(item.getCountLiked() + " Likes");
+                    } else {
+                        item.setLiked(true);
                         Glide.with(context)
                                 .load(R.drawable.liked)
                                 .into(viewHolder.btnLiked);
-                        items.get(position).setCountLiked(items.get(position).getCountLiked()+1);
-                        viewHolder.txtLike.setText(items.get(position).getCountLiked()+" Likes");
+                        item.setCountLiked(item.getCountLiked() + 1);
+                        viewHolder.txtLike.setText(item.getCountLiked() + " Likes");
                     }
                 }
             });
-
-            viewHolder.mPests.addAll(items.get(position).getPests());
-            viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-            pestAdapter = new PestAdapter(context,viewHolder.mPests);
-            viewHolder.recyclerView.setAdapter(pestAdapter);
-        }
-        else if(holder instanceof LoadingViewHolder)
-        {
-            LoadingViewHolder loadingViewHolder = (LoadingViewHolder)holder;
+            if (item.getPests().size() != 0 ||
+                    item.getFertilizers().size() != 0 ||
+                    item.getProducts().size() != 0 ||
+                    item.getTransporters().size() != 0 ||
+                    item.getPackages().size() != 0) {
+                viewHolder.recyclerView.setVisibility(View.VISIBLE);
+                List<String> list = new ArrayList<>();
+                if (item.getPests().size() > 0) {
+                    for (int i = 0; i < item.getPests().size(); i++) {
+                        list.add(item.getPests().get(i).getName());
+                    }
+                }
+                if (item.getFertilizers().size() > 0) {
+                    for (int i = 0; i < item.getFertilizers().size(); i++) {
+                        list.add(item.getFertilizers().get(i).getName());
+                    }
+                }
+                if (item.getProducts().size() > 0) {
+                    for (int i = 0; i < item.getProducts().size(); i++) {
+                        list.add(item.getProducts().get(i).getName());
+                    }
+                }
+                if (item.getTransporters().size() > 0) {
+                    for (int i = 0; i < item.getTransporters().size(); i++) {
+                        list.add(item.getTransporters().get(i).getName());
+                    }
+                }
+                if (item.getPackages().size() > 0) {
+                    for (int i = 0; i < item.getPackages().size(); i++) {
+                        list.add(item.getPackages().get(i).getName());
+                    }
+                }
+                pestAdapter = new PestAdapter(context, list);
+                viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
+                viewHolder.recyclerView.setAdapter(pestAdapter);
+            } else {
+                viewHolder.recyclerView.setVisibility(View.GONE);
+            }
+            mainPresenter=new MainPresenter(this);
+            refer_id=item.getId()+"";
+            pageLimit=item.getCountComments()+"";
+            viewHolder.btnCmt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mainPresenter.loadCommentData();
+                    Intent intent = new Intent(context, CommentActivity.class);
+                    context.startActivity(intent);
+                }
+            });
+        } else if (holder instanceof LoadingViewHolder) {
+            LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
         }
+    }
 
+    void setValue(String value, JSONArray array, LinearLayout row1, LinearLayout row2, LinearLayout row3) {
+        if (value != null) {
+            if (array.length() == 1) {
+                showViews1(row1, row2, row3);
+            } else if (array.length() == 2) {
+                showViews2(row1, row2, row3);
+            } else if (array.length() >= 3) {
+                showViews3(row1, row2, row3);
+            }
+        }
+    }
+
+    private void showViews1(LinearLayout row1, LinearLayout row2, LinearLayout row3) {
+        row1.setVisibility(View.VISIBLE);
+        row2.setVisibility(View.GONE);
+        row3.setVisibility(View.GONE);
+    }
+
+    private void showViews2(LinearLayout row1, LinearLayout row2, LinearLayout row3) {
+        row1.setVisibility(View.GONE);
+        row2.setVisibility(View.VISIBLE);
+        row3.setVisibility(View.GONE);
+    }
+
+    private void showViews3(LinearLayout row1, LinearLayout row2, LinearLayout row3) {
+        row1.setVisibility(View.GONE);
+        row2.setVisibility(View.GONE);
+        row3.setVisibility(View.VISIBLE);
+    }
+
+    private void hideViews(LinearLayout row1, LinearLayout row2, LinearLayout row3) {
+        row1.setVisibility(View.GONE);
+        row2.setVisibility(View.GONE);
+        row3.setVisibility(View.GONE);
     }
 
     @Override
@@ -274,5 +374,10 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void setLoaded() {
         isLoading = false;
+    }
+
+    @Override
+    public void displayCmtSuccess(ArrayList<Datum2> datas) {
+        DataCmt=datas;
     }
 }

@@ -9,4 +9,6 @@
     <string name="status">What on your mind?</string>
     <string name="viewmore">View more</string>
     <string name="showless">Show less</string>
+    <string name="like">Thích</string>
+    <string name="reply">Trả lời</string>
 </resources>

@@ -5,23 +5,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.volio.model.entity2.Fertilizer;
+import com.volio.model.entity2.Package;
 import com.volio.model.entity2.Pest;
+import com.volio.model.entity2.Product;
+import com.volio.model.entity2.Transporter;
 import com.volio.view.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PestAdapter extends
         RecyclerView.Adapter<PestAdapter.ViewHolder> {
     private Context mContext;
-    private List<Pest> pests;
+    private List<String> list;
 
-    public PestAdapter(Context mContext, List<Pest> pests) {
+    public PestAdapter(Context mContext, List<String> list) {
         this.mContext = mContext;
-        this.pests = pests;
+        this.list = list;
     }
 
     @NonNull
@@ -35,13 +41,13 @@ public class PestAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Pest pest = pests.get(position);
-        holder.txtPest.setText(pest.getName());
+        String x = list.get(position);
+        holder.txtPest.setText(x);
     }
 
     @Override
     public int getItemCount() {
-        return pests.size();
+        return list.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

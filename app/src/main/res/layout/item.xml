@@ -54,28 +54,47 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txt"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt2"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/imgPost21"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/imgPost22"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:id="@+id/ll1">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/imgPost1"
+            android:id="@+id/imgPost11"
+            android:scaleType="fitXY"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/ll2">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/imgPost21"
+            android:scaleType="fitXY"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/imgPost22"
+            android:scaleType="fitXY"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/ll3">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imgPost31"
             android:scaleType="fitXY"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -85,7 +104,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:id="@+id/imgPost2"/>
+                android:id="@+id/imgPost32"/>
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -93,7 +112,7 @@
                 android:layout_weight="1">
 
                 <ImageView
-                    android:id="@+id/imgPost3"
+                    android:id="@+id/imgPost33"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -105,7 +124,6 @@
                     android:layout_centerInParent="true"/>
             </RelativeLayout>
         </LinearLayout>
-    </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

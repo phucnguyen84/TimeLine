@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.volio.model.entity.DataEntered;
 import com.volio.model.entity2.Datum;
+import com.volio.model.entity3.Datum2;
 import com.volio.presenter.MainPresenter;
 
 import java.util.ArrayList;
@@ -18,21 +19,22 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoginView {
     private MainPresenter mainPresenter;
-    private EditText edtCode,edtUser,edtPassword;
-    private String code,user,password;
+    private EditText edtCode, edtUser, edtPassword;
+    private String code, user, password;
     public static DataEntered dataEntered;
     public static ArrayList<Datum> DisplayData;
     private Button btnLogin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         addControls();
         initPresenter();
-        code=edtCode.getText().toString();
-        user=edtUser.getText().toString();
-        password=edtPassword.getText().toString();
-        dataEntered=new DataEntered(user,password,code,"");
+        code = edtCode.getText().toString();
+        user = edtUser.getText().toString();
+        password = edtPassword.getText().toString();
+        dataEntered = new DataEntered(user, password, code, "");
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,20 +44,20 @@ public class MainActivity extends AppCompatActivity implements LoginView {
     }
 
     private void initPresenter() {
-        mainPresenter=new MainPresenter(this);
+        mainPresenter = new MainPresenter(this);
     }
 
     private void addControls() {
-        edtCode=findViewById(R.id.edtCode);
-        edtUser=findViewById(R.id.edtUser);
-        edtPassword=findViewById(R.id.edtPassword);
-        btnLogin=findViewById(R.id.btnLogin);
+        edtCode = findViewById(R.id.edtCode);
+        edtUser = findViewById(R.id.edtUser);
+        edtPassword = findViewById(R.id.edtPassword);
+        btnLogin = findViewById(R.id.btnLogin);
     }
 
     @Override
     public void displayLoginSuccess(ArrayList<Datum> datas) {
-        DisplayData= datas;
-        startActivity(new Intent(MainActivity.this,LoginSuccess.class));
+        DisplayData = datas;
+        startActivity(new Intent(MainActivity.this, LoginSuccess.class));
     }
 
     @Override
