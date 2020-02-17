@@ -78,12 +78,14 @@ class ItemViewHolder extends RecyclerView.ViewHolder {
 
 public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements CommentView {
     private MainPresenter mainPresenter;
-    public static ArrayList<Datum2> DataCmt;
+    public static List<Datum2> DataCmt;
+    public static String countLike;
 
     public PestAdapter pestAdapter;
     public String[] img = new String[100];
     public static String refer_id;
     public static String pageLimit;
+    public static boolean like;
 
 
     public static String img_Post = "";
@@ -246,7 +248,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 }
             });
             viewHolder.txtLike.setText(item.getCountLiked() + " Likes");
-            viewHolder.txtCmt.setText(item.getCountComments() + " CommentActivity");
+            viewHolder.txtCmt.setText(item.getCountComments() + " Comments");
             if (item.getLiked() == true) {
                 Glide.with(context)
                         .load(R.drawable.liked)
@@ -314,15 +316,17 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             } else {
                 viewHolder.recyclerView.setVisibility(View.GONE);
             }
-            mainPresenter=new MainPresenter(this);
-            refer_id=item.getId()+"";
-            pageLimit=item.getCountComments()+"";
+            mainPresenter = new MainPresenter(this);
+
             viewHolder.btnCmt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    pageLimit = item.getCountComments() + "";
+                    countLike = item.getCountLiked() + "";
+                    refer_id = item.getId() + "";
+                    like = item.getLiked();
                     mainPresenter.loadCommentData();
-                    Intent intent = new Intent(context, CommentActivity.class);
-                    context.startActivity(intent);
+
                 }
             });
         } else if (holder instanceof LoadingViewHolder) {
@@ -377,7 +381,9 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     @Override
-    public void displayCmtSuccess(ArrayList<Datum2> datas) {
-        DataCmt=datas;
+    public void displayCmtSuccess(List<Datum2> data) {
+        DataCmt = data;
+        Intent intent = new Intent(context, CommentActivity.class);
+        context.startActivity(intent);
     }
 }

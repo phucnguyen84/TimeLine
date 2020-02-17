@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements LoginView {
     private EditText edtCode, edtUser, edtPassword;
     private String code, user, password;
     public static DataEntered dataEntered;
-    public static ArrayList<Datum> DisplayData;
+    public static List<Datum> DisplayData;
     private Button btnLogin;
 
     @Override
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements LoginView {
     }
 
     @Override
-    public void displayLoginSuccess(ArrayList<Datum> datas) {
+    public void displayLoginSuccess(List<Datum> datas) {
         DisplayData = datas;
         startActivity(new Intent(MainActivity.this, LoginSuccess.class));
     }

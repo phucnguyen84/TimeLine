@@ -4,34 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CommentActivity"
+    tools:context=".ReplyComment"
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center">
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:id="@+id/like"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/txtCountLike"
-            android:layout_toRightOf="@+id/like"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:gravity="center"/>
+        android:layout_height="50dp">
         <ImageView
             android:layout_width="20dp"
             android:layout_height="match_parent"
-            android:id="@+id/exitCmt"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/down"
-            android:layout_marginRight="15dp"/>
+            android:id="@+id/backCmt"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/back"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/reply"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:gravity="center"/>
     </RelativeLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recyclerView3"/>
+        android:id="@+id/recyclerView4"/>
+
 </LinearLayout>

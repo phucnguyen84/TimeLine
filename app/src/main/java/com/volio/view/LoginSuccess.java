@@ -38,8 +38,11 @@ public class LoginSuccess extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mDatums.clear();
-                mDatums.addAll(MainActivity.DisplayData);
+//                mDatums.clear();
+//                mDatums.addAll(MainActivity.DisplayData);
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

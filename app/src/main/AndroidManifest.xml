@@ -6,12 +6,15 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CommentActivity"></activity>
+        <activity android:name=".ReplyComment"/>
+        <activity android:name=".CommentActivity" />
         <activity android:name=".ImageAdd" />
         <activity android:name=".LoginSuccess" />
         <activity android:name=".MainActivity">

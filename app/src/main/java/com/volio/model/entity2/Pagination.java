@@ -1,5 +1,6 @@
 package com.volio.model.entity2;
 
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -20,9 +21,9 @@ public class Pagination {
     @SerializedName("total_pages")
     @Expose
     private Integer totalPages;
-    @SerializedName("links")
-    @Expose
-    private Links links;
+//    @SerializedName("links")
+//    @Expose
+//    private List<Object> links = null;
 
     public Integer getTotal() {
         return total;
@@ -64,12 +65,12 @@ public class Pagination {
         this.totalPages = totalPages;
     }
 
-    public Links getLinks() {
-        return links;
-    }
-
-    public void setLinks(Links links) {
-        this.links = links;
-    }
+//    public List<Object> getLinks() {
+//        return links;
+//    }
+//
+//    public void setLinks(List<Object> links) {
+//        this.links = links;
+//    }
 
 }

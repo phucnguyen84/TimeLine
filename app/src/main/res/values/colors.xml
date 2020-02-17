@@ -10,4 +10,6 @@
     <color name="gray1">#EBEEE9</color>
     <color name="gray">#A3A2A3</color>
     <color name="blue">#3784FF</color>
+    <color name="llcmt">#F3F2F3</color>
+    <color name="txtcmt">#828182</color>
 </resources>

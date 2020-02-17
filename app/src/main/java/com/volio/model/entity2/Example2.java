@@ -1,15 +1,14 @@
 package com.volio.model.entity2;
 
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
 
 public class Example2 {
 
     @SerializedName("data")
     @Expose
-    private ArrayList<Datum> data = null;
+    private List<Datum> data = null;
     @SerializedName("meta")
     @Expose
     private Meta meta;
@@ -23,11 +22,11 @@ public class Example2 {
     @Expose
     private Request request;
 
-    public ArrayList<Datum> getData() {
+    public List<Datum> getData() {
         return data;
     }
 
-    public void setData(ArrayList<Datum> data) {
+    public void setData(List<Datum> data) {
         this.data = data;
     }
 
