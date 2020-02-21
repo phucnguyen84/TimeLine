@@ -3,7 +3,9 @@ package com.volio.model.entity2;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Transporter {
+import java.io.Serializable;
+
+public class Transporter implements Serializable {
 
     @SerializedName("id")
     @Expose

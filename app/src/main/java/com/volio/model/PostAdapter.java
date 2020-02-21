@@ -2,6 +2,12 @@ package com.volio.model;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +32,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,17 +90,16 @@ class ItemViewHolder extends RecyclerView.ViewHolder {
 
 public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements CommentView {
     private MainPresenter mainPresenter;
-    public static List<Datum2> DataCmt;
-    public static String countLike;
+    public String countLike;
 
-    public PestAdapter pestAdapter;
-    public String[] img = new String[100];
-    public static String refer_id;
-    public static String pageLimit;
-    public static boolean like;
+    PestAdapter pestAdapter;
+    String[] img = new String[100];
+    String refer_id;
+    String pageLimit;
+    boolean like;
 
 
-    public static String img_Post = "";
+    String img_Post;
 
     private final int VIEW_TYPE_ITEM = 0, VIEW_TYPE_LOADING = 1;
     ILoadMore loadMore;
@@ -188,7 +199,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     Glide.with(context)
                             .load(object.getString("url"))
                             .into(viewHolder.imgPost11);
-                    viewHolder.imgPost11.getLayoutParams().height = 1000;
                 } else if (array.length() == 2) {
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject object = array.getJSONObject(i);
@@ -196,13 +206,11 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                             Glide.with(context)
                                     .load(object.getString("url"))
                                     .into(viewHolder.imgPost21);
-                            viewHolder.imgPost21.getLayoutParams().height = 500;
                         }
                         if (i == 1) {
                             Glide.with(context)
                                     .load(object.getString("url"))
                                     .into(viewHolder.imgPost22);
-                            viewHolder.imgPost22.getLayoutParams().height = 500;
                         }
                     }
                 } else if (array.length() > 2) {
@@ -212,7 +220,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                             Glide.with(context)
                                     .load(object.getString("url"))
                                     .into(viewHolder.imgPost31);
-                            viewHolder.imgPost31.getLayoutParams().height = 1000;
                             if (array.length() > 3) {
                                 img_Post = object.getString("url");
                                 img[position] = img_Post;
@@ -244,6 +251,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 public void onClick(View v) {
                     img_Post = img[position];
                     Intent intent = new Intent(context, ImageAdd.class);
+                    intent.putExtra("imgpost", img_Post);
                     v.getContext().startActivity(intent);
                 }
             });
@@ -317,16 +325,14 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 viewHolder.recyclerView.setVisibility(View.GONE);
             }
             mainPresenter = new MainPresenter(this);
-
             viewHolder.btnCmt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     pageLimit = item.getCountComments() + "";
-                    countLike = item.getCountLiked() + "";
                     refer_id = item.getId() + "";
+                    mainPresenter.loadCommentData(refer_id, pageLimit);
+                    countLike = item.getCountLiked() + "";
                     like = item.getLiked();
-                    mainPresenter.loadCommentData();
-
                 }
             });
         } else if (holder instanceof LoadingViewHolder) {
@@ -382,8 +388,12 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     @Override
     public void displayCmtSuccess(List<Datum2> data) {
-        DataCmt = data;
         Intent intent = new Intent(context, CommentActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("comment", (Serializable) data);
+        bundle.putString("countlike", countLike);
+        bundle.putBoolean("like", like);
+        intent.putExtras(bundle);
         context.startActivity(intent);
     }
 }

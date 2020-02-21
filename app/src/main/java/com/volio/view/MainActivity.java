@@ -14,16 +14,18 @@ import com.volio.model.entity2.Datum;
 import com.volio.model.entity3.Datum2;
 import com.volio.presenter.MainPresenter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoginView {
     private MainPresenter mainPresenter;
     private EditText edtCode, edtUser, edtPassword;
-    private String code, user, password;
-    public static DataEntered dataEntered;
-    public static List<Datum> DisplayData;
     private Button btnLogin;
+
+    private String code, user, password;
+    DataEntered dataEntered;
+    List<Datum> DisplayData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements LoginView {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mainPresenter.loadData();
+                mainPresenter.loadData(dataEntered);
             }
         });
     }
@@ -56,8 +58,11 @@ public class MainActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void displayLoginSuccess(List<Datum> datas) {
-        DisplayData = datas;
-        startActivity(new Intent(MainActivity.this, LoginSuccess.class));
+        Intent intent = new Intent(MainActivity.this, LoginSuccess.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data", (Serializable) datas);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override

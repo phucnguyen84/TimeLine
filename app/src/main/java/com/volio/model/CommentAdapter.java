@@ -3,6 +3,8 @@ package com.volio.model;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.volio.view.R;
 import com.volio.view.ReplyComment;
 import com.volio.view.ReplyCommentView;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,8 +36,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     private MainPresenter mainPresenter;
     private Context context;
     private List<Datum2> dataCmt;
-    public static String parent_id;
-    public static List<Datum3> dataReply;
+    String parent_id;
+    List<Datum3> dataReply = new ArrayList<>();
 
     public CommentAdapter(Context context, List<Datum2> dataCmt) {
         this.context = context;
@@ -96,9 +99,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 }
             }
         });
-        if (datum2.getSubs().size() > 3) {
+        if (datum2.getTotalSub() > 3) {
             holder.txtSeemoreCmt.setVisibility(View.VISIBLE);
-            holder.txtSeemoreCmt.setText("Xem thêm " + (datum2.getSubs().size() - 3) + " trả lời");
+            holder.txtSeemoreCmt.setText("Xem thêm " + (datum2.getTotalSub() - 3) + " trả lời");
         } else {
             holder.txtSeemoreCmt.setVisibility(View.GONE);
         }
@@ -107,21 +110,21 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 parent_id = datum2.getId() + "";
-                mainPresenter.loadReplyCmtData();
+                mainPresenter.loadReplyCmtData(parent_id);
             }
         });
         holder.txtReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 parent_id = datum2.getId() + "";
-                mainPresenter.loadReplyCmtData();
+                mainPresenter.loadReplyCmtData(parent_id);
             }
         });
-        if (datum2.getSubs().size() < 1) {
+        if (datum2.getTotalSub() < 1) {
             holder.llReplyCmt1.setVisibility(View.GONE);
             holder.llReplyCmt2.setVisibility(View.GONE);
             holder.llReplyCmt3.setVisibility(View.GONE);
-        } else if (datum2.getSubs().size() < 2) {
+        } else if (datum2.getTotalSub() < 2) {
             holder.llReplyCmt1.setVisibility(View.VISIBLE);
             holder.llReplyCmt2.setVisibility(View.GONE);
             holder.llReplyCmt3.setVisibility(View.GONE);
@@ -130,7 +133,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                     .into(holder.imgUserCmtReply1);
             holder.txtUserCmtReply1.setText(datum2.getSubs().get(0).getFirstname() + " " + datum2.getSubs().get(0).getLastname());
             holder.txtContentCmtReply1.setText(datum2.getSubs().get(0).getContent());
-        } else if (datum2.getSubs().size() < 3) {
+        } else if (datum2.getTotalSub() < 3) {
             holder.llReplyCmt1.setVisibility(View.VISIBLE);
             holder.llReplyCmt2.setVisibility(View.VISIBLE);
             holder.llReplyCmt3.setVisibility(View.GONE);
@@ -175,7 +178,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public void displayReplyCmtSuccess(List<Datum3> datas) {
         dataReply = datas;
-        context.startActivity(new Intent(context, ReplyComment.class));
+        Intent intent = new Intent(context, ReplyComment.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("reply", (Serializable) datas);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

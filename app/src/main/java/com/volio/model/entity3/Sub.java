@@ -4,7 +4,9 @@ package com.volio.model.entity3;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Sub {
+import java.io.Serializable;
+
+public class Sub implements Serializable {
 
     @SerializedName("id")
     @Expose

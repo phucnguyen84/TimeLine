@@ -16,12 +16,15 @@ import com.volio.model.PostAdapter;
 import com.volio.model.entity2.Datum;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LoginSuccess extends AppCompatActivity {
     ArrayList<Datum> mDatums = new ArrayList<>();
     RecyclerView recyclerView1;
     PostAdapter postAdapter;
     ImageView imageView;
+
+    List<Datum> data = new ArrayList<>();
 
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -30,17 +33,23 @@ public class LoginSuccess extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_success);
         addControls();
+        final Intent intent = getIntent();
+        Bundle bundle;
+        bundle = intent.getExtras();
+        if (bundle != null) {
+            data = (List<Datum>) bundle.getSerializable("data");
+        } else {
+            return;
+        }
         recyclerView1.setLayoutManager(new LinearLayoutManager(this));
         postAdapter = new PostAdapter(recyclerView1, this, mDatums);
         recyclerView1.setAdapter(postAdapter);
         addEvents();
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 //                mDatums.clear();
-//                mDatums.addAll(MainActivity.DisplayData);
-                Intent intent = getIntent();
+//                mDatums.addAll(data);
                 finish();
                 startActivity(intent);
                 swipeRefreshLayout.setRefreshing(false);
@@ -53,13 +62,13 @@ public class LoginSuccess extends AppCompatActivity {
     }
 
     private void addEvents() {
-        for (int i = 0; i < 2; i++) {
-            mDatums.add(MainActivity.DisplayData.get(i));
+        for (int i = 0; i < 5; i++) {
+            mDatums.add(data.get(i));
         }
         postAdapter.setLoadMore(new ILoadMore() {
             @Override
             public void OnLoadMore() {
-                if (mDatums.size() < MainActivity.DisplayData.size()) {
+                if (mDatums.size() < data.size()) {
                     mDatums.add(null);
                     postAdapter.notifyItemInserted(mDatums.size() - 1);
                     new Handler().postDelayed(new Runnable() {
@@ -69,11 +78,12 @@ public class LoginSuccess extends AppCompatActivity {
                             postAdapter.notifyItemRemoved(mDatums.size());
 
                             int index = mDatums.size();
-                            int end = index + 1;
-                            if (end <= MainActivity.DisplayData.size()) {
-                                for (int i = index; i < end; i++) {
-                                    mDatums.add(MainActivity.DisplayData.get(i));
-                                }
+                            int end = index + 5;
+                            for (int i = index; i < end; i++) {
+                                if (i < data.size()) {
+                                    mDatums.add(data.get(i));
+                                } else
+                                    break;
                             }
                             postAdapter.notifyDataSetChanged();
                             postAdapter.setLoaded();

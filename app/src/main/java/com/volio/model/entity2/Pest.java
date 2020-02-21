@@ -3,7 +3,9 @@ package com.volio.model.entity2;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Pest {
+import java.io.Serializable;
+
+public class Pest implements Serializable {
 
     @SerializedName("id")
     @Expose

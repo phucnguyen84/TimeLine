@@ -3,7 +3,9 @@ package com.volio.model.entity2;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Pivot_ {
+import java.io.Serializable;
+
+public class Pivot_ implements Serializable {
 
     @SerializedName("diary_id")
     @Expose

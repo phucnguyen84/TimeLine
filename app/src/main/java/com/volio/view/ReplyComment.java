@@ -12,12 +12,17 @@ import android.widget.ImageView;
 
 import com.volio.model.CommentAdapter;
 import com.volio.model.ReplyCommentAdapter;
+import com.volio.model.entity4.Datum3;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReplyComment extends AppCompatActivity {
     RecyclerView recyclerView;
     ReplyCommentAdapter replyCommentAdapter;
     Context context;
     ImageView backCmt;
+    List<Datum3> dataReply = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +32,22 @@ public class ReplyComment extends AppCompatActivity {
         backCmt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ReplyComment.this, CommentActivity.class));
+                finish();
             }
         });
-        if (CommentAdapter.dataReply.size() != 0) {
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            dataReply = (List<Datum3>) bundle.getSerializable("reply");
+        } else {
+            return;
+        }
+//        List<Datum3> dataReply= (List<Datum3>) intent.getSerializableExtra("reply");
+
+        if (dataReply.size() != 0) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-            replyCommentAdapter = new ReplyCommentAdapter(this, CommentAdapter.dataReply);
+            replyCommentAdapter = new ReplyCommentAdapter(this, dataReply);
             recyclerView.setAdapter(replyCommentAdapter);
         } else {
             recyclerView.setVisibility(View.GONE);

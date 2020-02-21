@@ -39,16 +39,16 @@ public class MainPresenter implements LoadDataListener {
         pushPresenter = new PushPresenter(this);
     }
 
-    public void loadData() {
-        pushPresenter.getCurrentData();
+    public void loadData(DataEntered dataEntered) {
+        pushPresenter.getCurrentData(dataEntered);
     }
 
-    public void loadCommentData() {
-        pushPresenter.getCommentData();
+    public void loadCommentData(String refer_id, String pageLimit) {
+        pushPresenter.getCommentData(refer_id, pageLimit);
     }
 
-    public void loadReplyCmtData() {
-        pushPresenter.getReplyCommentData();
+    public void loadReplyCmtData(String parent_id) {
+        pushPresenter.getReplyCommentData(parent_id);
     }
 
     @Override
