@@ -106,20 +106,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             holder.txtSeemoreCmt.setVisibility(View.GONE);
         }
         mainPresenter = new MainPresenter(this);
-        holder.txtSeemoreCmt.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener onClickListener=new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 parent_id = datum2.getId() + "";
                 mainPresenter.loadReplyCmtData(parent_id);
             }
-        });
-        holder.txtReply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                parent_id = datum2.getId() + "";
-                mainPresenter.loadReplyCmtData(parent_id);
-            }
-        });
+        };
+        holder.txtSeemoreCmt.setOnClickListener(onClickListener);
+        holder.txtReply.setOnClickListener(onClickListener);
         if (datum2.getTotalSub() < 1) {
             holder.llReplyCmt1.setVisibility(View.GONE);
             holder.llReplyCmt2.setVisibility(View.GONE);
