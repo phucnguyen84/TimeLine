@@ -17,7 +17,8 @@
             android:textStyle="bold"
             android:textSize="15sp"
             android:layout_gravity="center"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:textColor="@android:color/black"/>
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"
