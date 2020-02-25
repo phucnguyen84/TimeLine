@@ -22,10 +22,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.volio.model.entity2.Datum;
 import com.volio.model.entity3.Datum2;
+import com.volio.model.entityLiked.DataPostLiked;
+import com.volio.model.entityPeopleLiked.Datum4;
 import com.volio.presenter.MainPresenter;
 import com.volio.view.CommentActivity;
 import com.volio.view.CommentView;
 import com.volio.view.ImageAdd;
+import com.volio.view.PeopleLiked;
 import com.volio.view.R;
 
 import org.json.JSONArray;
@@ -256,6 +259,12 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 }
             });
             viewHolder.txtLike.setText(item.getCountLiked() + " Likes");
+            viewHolder.txtLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mainPresenter.loadPeopleLikedData(item.getId() + "");
+                }
+            });
             viewHolder.txtCmt.setText(item.getCountComments() + " Comments");
             if (item.getLiked() == true) {
                 Glide.with(context)
@@ -266,11 +275,14 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         .load(R.drawable.like)
                         .into(((ItemViewHolder) holder).btnLiked);
             }
+            mainPresenter = new MainPresenter(this);
             viewHolder.btnLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    DataPostLiked dataPostLiked = new DataPostLiked(item.getId() + "", "5");
                     if (item.getLiked() == true) {
                         item.setLiked(false);
+                        mainPresenter.loadUnLikedData(dataPostLiked);
                         Glide.with(context)
                                 .load(R.drawable.like)
                                 .into(viewHolder.btnLiked);
@@ -278,6 +290,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         viewHolder.txtLike.setText(item.getCountLiked() + " Likes");
                     } else {
                         item.setLiked(true);
+                        mainPresenter.loadLikedData(dataPostLiked);
                         Glide.with(context)
                                 .load(R.drawable.liked)
                                 .into(viewHolder.btnLiked);
@@ -324,7 +337,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             } else {
                 viewHolder.recyclerView.setVisibility(View.GONE);
             }
-            mainPresenter = new MainPresenter(this);
             viewHolder.btnCmt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -393,6 +405,16 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         bundle.putSerializable("comment", (Serializable) data);
         bundle.putString("countlike", countLike);
         bundle.putBoolean("like", like);
+        bundle.putString("referid", refer_id);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
+
+    @Override
+    public void displayPeopleLiked(List<Datum4> data) {
+        Intent intent = new Intent(context, PeopleLiked.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("liked", (Serializable) data);
         intent.putExtras(bundle);
         context.startActivity(intent);
     }

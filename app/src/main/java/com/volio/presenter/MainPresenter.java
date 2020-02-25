@@ -10,6 +10,11 @@ import com.volio.model.entity3.Datum2;
 import com.volio.model.entity3.Example3;
 import com.volio.model.entity4.Datum3;
 import com.volio.model.entity4.Example4;
+import com.volio.model.entityLiked.Data;
+import com.volio.model.entityLiked.DataLiked;
+import com.volio.model.entityLiked.DataPostLiked;
+import com.volio.model.entityPeopleLiked.DataPeopleLiked;
+import com.volio.model.entityPeopleLiked.Datum4;
 import com.volio.view.CommentView;
 import com.volio.view.LoginView;
 import com.volio.view.ReplyCommentView;
@@ -51,6 +56,18 @@ public class MainPresenter implements LoadDataListener {
         pushPresenter.getReplyCommentData(parent_id);
     }
 
+    public void loadLikedData(DataPostLiked dataPostLiked) {
+        pushPresenter.postDataLiked(dataPostLiked);
+    }
+
+    public void loadUnLikedData(DataPostLiked dataPostLiked) {
+        pushPresenter.postDataUnLiked(dataPostLiked);
+    }
+
+    public void loadPeopleLikedData(String referid) {
+        pushPresenter.getDataPeopleLiked(referid);
+    }
+
     @Override
     public void onLoadDataSuccess(List<Datum> datas) {
         loginView.displayLoginSuccess(datas);
@@ -67,8 +84,8 @@ public class MainPresenter implements LoadDataListener {
     }
 
     @Override
-    public void onLoadDataFailure(String message) {
-        loginView.displayLoginFailure(message);
+    public void onLoadPeopleLikedData(List<Datum4> datas) {
+        commentView.displayPeopleLiked(datas);
     }
 
     @Override
@@ -88,6 +105,21 @@ public class MainPresenter implements LoadDataListener {
 
     @Override
     public Call<Example4> getReplyCommentData(String parent_id, String token) {
+        return null;
+    }
+
+    @Override
+    public Call<DataLiked> postDataLiked(String token, DataPostLiked dataPostLiked) {
+        return null;
+    }
+
+    @Override
+    public Call<DataLiked> postDataUnLiked(String token, DataPostLiked dataPostLiked) {
+        return null;
+    }
+
+    @Override
+    public Call<DataPeopleLiked> getDataPeopleLiked(String referid, String token) {
         return null;
     }
 }

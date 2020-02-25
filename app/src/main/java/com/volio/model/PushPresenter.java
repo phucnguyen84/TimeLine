@@ -1,13 +1,15 @@
 package com.volio.model;
 
-import android.content.Intent;
-
 import com.volio.model.entity.DataEntered;
 import com.volio.model.entity.Example;
 import com.volio.model.entity2.Example2;
 import com.volio.model.entity3.Example3;
 import com.volio.model.entity4.Example4;
-import com.volio.view.MainActivity;
+import com.volio.model.entityLiked.Data;
+import com.volio.model.entityLiked.DataLiked;
+import com.volio.model.entityLiked.DataPostLiked;
+import com.volio.model.entityPeopleLiked.DataPeopleLiked;
+import com.volio.model.entityPeopleLiked.Datum4;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,6 +23,7 @@ public class PushPresenter {
     String pageLimit = "20";
     String page = "1";
     public static String token;
+    public static String s, s2;
 
 
     public PushPresenter(LoadDataListener listener) {
@@ -62,6 +65,52 @@ public class PushPresenter {
 
             @Override
             public void onFailure(Call<Example> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void postDataLiked(DataPostLiked dataPostLiked) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BareUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final LoadDataListener service = retrofit.create(LoadDataListener.class);
+        Call<DataLiked> call = service.postDataLiked("Bearer" + token, dataPostLiked);
+        call.enqueue(new Callback<DataLiked>() {
+            @Override
+            public void onResponse(Call<DataLiked> call, Response<DataLiked> response) {
+                if (response.code() == 200) {
+                    DataLiked data = response.body();
+                    assert data != null;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataLiked> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void postDataUnLiked(DataPostLiked dataPostLiked) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BareUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final LoadDataListener service = retrofit.create(LoadDataListener.class);
+        Call<DataLiked> call = service.postDataUnLiked("Bearer" + token, dataPostLiked);
+        call.enqueue(new Callback<DataLiked>() {
+            @Override
+            public void onResponse(Call<DataLiked> call, Response<DataLiked> response) {
+                if (response.code() == 200) {
+                    DataLiked data = response.body();
+                    assert data != null;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataLiked> call, Throwable t) {
 
             }
         });
@@ -110,6 +159,31 @@ public class PushPresenter {
 
             @Override
             public void onFailure(Call<Example4> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    public void getDataPeopleLiked(String referid) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BareUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final LoadDataListener service = retrofit.create(LoadDataListener.class);
+        Call<DataPeopleLiked> call = service.getDataPeopleLiked(referid, token);
+        call.enqueue(new Callback<DataPeopleLiked>() {
+            @Override
+            public void onResponse(Call<DataPeopleLiked> call, Response<DataPeopleLiked> response) {
+                if (response.code() == 200) {
+                    DataPeopleLiked data = response.body();
+                    assert data != null;
+                    listener.onLoadPeopleLikedData(data.getData());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataPeopleLiked> call, Throwable t) {
 
             }
         });
