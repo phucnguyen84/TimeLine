@@ -48,10 +48,10 @@ public class LoginSuccess extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                mDatums.clear();
-//                mDatums.addAll(data);
-                finish();
-                startActivity(intent);
+                mDatums.clear();
+                mDatums.addAll(data);
+//                finish();
+//                startActivity(intent);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
