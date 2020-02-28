@@ -20,10 +20,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PushPresenter {
     LoadDataListener listener;
     String BareUrl = "https://api.nextfarm.vn/";
-    String pageLimit = "20";
+    String pageLimit = "11";
     String page = "1";
     public static String token;
-    public static String s, s2;
 
 
     public PushPresenter(LoadDataListener listener) {
@@ -44,7 +43,7 @@ public class PushPresenter {
                     Example data = response.body();
                     assert data != null;
                     token = data.getData().getToken();
-                    Call<Example2> call2 = service.getCurrentData("127", pageLimit, page, token);
+                    Call<Example2> call2 = service.getCurrentData("5", pageLimit, page, token);
                     call2.enqueue(new Callback<Example2>() {
                         @Override
                         public void onResponse(Call<Example2> call, Response<Example2> response) {

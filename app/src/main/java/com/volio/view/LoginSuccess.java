@@ -13,12 +13,19 @@ import android.widget.ImageView;
 
 import com.volio.model.ILoadMore;
 import com.volio.model.PostAdapter;
+import com.volio.model.entity.DataEntered;
 import com.volio.model.entity2.Datum;
+import com.volio.presenter.MainPresenter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginSuccess extends AppCompatActivity {
+public class LoginSuccess extends AppCompatActivity implements LoginView{
+
+    MainPresenter mainPresenter;
+    String user,password,code;
+
     ArrayList<Datum> mDatums = new ArrayList<>();
     RecyclerView recyclerView1;
     PostAdapter postAdapter;
@@ -38,6 +45,9 @@ public class LoginSuccess extends AppCompatActivity {
         bundle = intent.getExtras();
         if (bundle != null) {
             data = (List<Datum>) bundle.getSerializable("data");
+            user = bundle.getString("user");
+            password=bundle.getString("pass");
+            code=bundle.getString("code");
         } else {
             return;
         }
@@ -45,13 +55,16 @@ public class LoginSuccess extends AppCompatActivity {
         postAdapter = new PostAdapter(recyclerView1, this, mDatums);
         recyclerView1.setAdapter(postAdapter);
         addEvents();
+        mainPresenter=new MainPresenter(this);
+        final DataEntered dataEntered=new DataEntered(user,password,code,"");
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mDatums.clear();
-                mDatums.addAll(data);
+//                mDatums.clear();
+//                mDatums.addAll(data);
 //                finish();
 //                startActivity(intent);
+                mainPresenter.loadData(dataEntered);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -98,5 +111,19 @@ public class LoginSuccess extends AppCompatActivity {
         recyclerView1 = findViewById(R.id.recyclerView);
         swipeRefreshLayout = findViewById(R.id.swipeContainer);
         imageView = findViewById(R.id.imgPost33);
+    }
+
+    @Override
+    public void displayLoginSuccess(List<Datum> data) {
+        Intent intent = getIntent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data", (Serializable) data);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void displayLoginFailure(String message) {
+
     }
 }

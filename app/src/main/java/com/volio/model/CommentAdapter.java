@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,9 +109,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         mainPresenter = new MainPresenter(this);
         View.OnClickListener onClickListener=new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 parent_id = datum2.getId() + "";
                 mainPresenter.loadReplyCmtData(parent_id);
+                v.setEnabled(false);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        v.setEnabled(true);
+                    }
+                },2000);
             }
         };
         holder.txtSeemoreCmt.setOnClickListener(onClickListener);
@@ -164,7 +172,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }
 
     }
-
     @Override
     public int getItemCount() {
         return dataCmt.size();

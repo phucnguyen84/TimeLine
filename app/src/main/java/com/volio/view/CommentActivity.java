@@ -70,6 +70,7 @@ public class CommentActivity extends AppCompatActivity implements CommentView {
             @Override
             public void onClick(View v) {
                 mainPresenter.loadPeopleLikedData(refer_id);
+                txtCountLike.setEnabled(false);
             }
         });
         if (dataCmt.size() != 0) {
@@ -79,7 +80,12 @@ public class CommentActivity extends AppCompatActivity implements CommentView {
         } else {
             recyclerView.setVisibility(View.GONE);
         }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        txtCountLike.setEnabled(true);
     }
 
     private void addControls() {

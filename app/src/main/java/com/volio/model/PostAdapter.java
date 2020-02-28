@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -256,6 +257,13 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     Intent intent = new Intent(context, ImageAdd.class);
                     intent.putExtra("imgpost", img_Post);
                     v.getContext().startActivity(intent);
+                    viewHolder.txtPostAdd.setEnabled(false);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            viewHolder.txtPostAdd.setEnabled(true);
+                        }
+                    },2000);
                 }
             });
             viewHolder.txtLike.setText(item.getCountLiked() + " Likes");
@@ -263,6 +271,13 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 @Override
                 public void onClick(View v) {
                     mainPresenter.loadPeopleLikedData(item.getId() + "");
+                    viewHolder.txtLike.setEnabled(false);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            viewHolder.txtLike.setEnabled(true);
+                        }
+                    },2000);
                 }
             });
             viewHolder.txtCmt.setText(item.getCountComments() + " Comments");
@@ -345,6 +360,13 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     mainPresenter.loadCommentData(refer_id, pageLimit);
                     countLike = item.getCountLiked() + "";
                     like = item.getLiked();
+                    viewHolder.btnCmt.setEnabled(false);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            viewHolder.btnCmt.setEnabled(true);
+                        }
+                    },2000);
                 }
             });
         } else if (holder instanceof LoadingViewHolder) {

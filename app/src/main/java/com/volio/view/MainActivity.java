@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements LoginView {
 
     private String code, user, password;
     DataEntered dataEntered;
-    List<Datum> DisplayData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +40,15 @@ public class MainActivity extends AppCompatActivity implements LoginView {
             @Override
             public void onClick(View v) {
                 mainPresenter.loadData(dataEntered);
+                btnLogin.setEnabled(false);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        btnLogin.setEnabled(true);
     }
 
     private void initPresenter() {
@@ -61,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements LoginView {
         Intent intent = new Intent(MainActivity.this, LoginSuccess.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("data", (Serializable) datas);
+        bundle.putString("user",user);
+        bundle.putString("pass",password);
+        bundle.putString("code",code);
         intent.putExtras(bundle);
         startActivity(intent);
     }
