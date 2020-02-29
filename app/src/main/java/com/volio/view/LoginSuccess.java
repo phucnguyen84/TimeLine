@@ -89,7 +89,6 @@ public class LoginSuccess extends AppCompatActivity implements LoginView{
                         public void run() {
                             mDatums.remove(mDatums.size() - 1);
                             postAdapter.notifyItemRemoved(mDatums.size());
-
                             int index = mDatums.size();
                             int end = index + 5;
                             for (int i = index; i < end; i++) {

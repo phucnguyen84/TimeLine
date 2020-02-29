@@ -190,8 +190,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             }
 
             viewHolder.txtPost.setText(item.getContent());
-            String json_string = item.getImage();
-            String json_string3 = "{" + "\"image\":" + json_string + "}" + "}";
+            final String json_string = item.getImage();
+            final String json_string3 = "{" + "\"image\":" + json_string + "}" + "}";
 
             try {
                 JSONObject root = new JSONObject(json_string3);
@@ -250,12 +250,11 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             if (json_string == null) {
                 hideViews(viewHolder.ll1, viewHolder.ll2, viewHolder.ll3);
             }
-            viewHolder.txtPostAdd.setOnClickListener(new View.OnClickListener() {
+            View.OnClickListener onClickListener=new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    img_Post = img[position];
                     Intent intent = new Intent(context, ImageAdd.class);
-                    intent.putExtra("imgpost", img_Post);
+                    intent.putExtra("json", json_string);
                     v.getContext().startActivity(intent);
                     viewHolder.txtPostAdd.setEnabled(false);
                     new Handler().postDelayed(new Runnable() {
@@ -265,7 +264,29 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         }
                     },2000);
                 }
-            });
+            };
+            viewHolder.imgPost11.setOnClickListener(onClickListener);
+            viewHolder.imgPost21.setOnClickListener(onClickListener);
+            viewHolder.imgPost22.setOnClickListener(onClickListener);
+            viewHolder.imgPost31.setOnClickListener(onClickListener);
+            viewHolder.imgPost32.setOnClickListener(onClickListener);
+            viewHolder.imgPost33.setOnClickListener(onClickListener);
+//            viewHolder.txtPostAdd.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    img_Post = img[position];
+//                    Intent intent = new Intent(context, ImageAdd.class);
+//                    intent.putExtra("json", json_string);
+//                    v.getContext().startActivity(intent);
+//                    viewHolder.txtPostAdd.setEnabled(false);
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            viewHolder.txtPostAdd.setEnabled(true);
+//                        }
+//                    },2000);
+//                }
+//            });
             viewHolder.txtLike.setText(item.getCountLiked() + " Likes");
             viewHolder.txtLike.setOnClickListener(new View.OnClickListener() {
                 @Override

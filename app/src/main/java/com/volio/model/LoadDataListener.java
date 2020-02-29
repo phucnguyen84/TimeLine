@@ -27,6 +27,8 @@ import retrofit2.http.Query;
 public interface LoadDataListener {
     void onLoadDataSuccess(List<Datum> datas);
 
+    void onLoadDataFailure(String message);
+
     void onLoadCommentData(List<Datum2> datas);
 
     void onLoadReplyCommentData(List<Datum3> datas);

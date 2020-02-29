@@ -1,34 +1,69 @@
 package com.volio.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.volio.model.PostAdapter;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
+import com.volio.model.DetailPhotosAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImageAdd extends AppCompatActivity {
-    ImageView imgPostAdd, backImg;
+    private ImageView imgBack;
+    private ViewPager viewPagerDetailPhoto;
+    private DetailPhotosAdapter detailPhotosAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_add);
-        Intent intent = getIntent();
-        String imgPost = intent.getStringExtra("imgpost");
-        imgPostAdd = findViewById(R.id.imgPostAdd);
-        backImg = findViewById(R.id.backImg);
-        Glide.with(ImageAdd.this)
-                .load(imgPost)
-                .into(imgPostAdd);
-        backImg.setOnClickListener(new View.OnClickListener() {
+        initView();
+        event();
+    }
+
+
+    private void initView() {
+        viewPagerDetailPhoto = findViewById(R.id.vpDetailPhoto);
+        imgBack=findViewById(R.id.backImg);
+    }
+
+
+    private void event() {
+        imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+        Intent intent = getIntent();
+        List<String> images = new ArrayList<>();
+        String json_image = "{\"image\":" + intent.getStringExtra("json") + "}";
+        try {
+
+            JSONObject mImagesJsonObject = new JSONObject(json_image);
+            JSONArray mImagesJsonArray = mImagesJsonObject.getJSONArray("image");
+            for (int i = 0; i < mImagesJsonArray.length(); i++) {
+                JSONObject image = mImagesJsonArray.getJSONObject(i);
+                images.add(image.getString("url"));
+            }
+            detailPhotosAdapter = new DetailPhotosAdapter(ImageAdd.this, images);
+            viewPagerDetailPhoto.setAdapter(detailPhotosAdapter);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

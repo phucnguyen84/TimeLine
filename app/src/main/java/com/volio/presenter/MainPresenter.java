@@ -74,6 +74,11 @@ public class MainPresenter implements LoadDataListener {
     }
 
     @Override
+    public void onLoadDataFailure(String message) {
+        loginView.displayLoginFailure(message);
+    }
+
+    @Override
     public void onLoadCommentData(List<Datum2> datas) {
         commentView.displayCmtSuccess(datas);
     }

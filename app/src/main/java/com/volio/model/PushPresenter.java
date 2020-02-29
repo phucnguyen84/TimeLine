@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PushPresenter {
     LoadDataListener listener;
     String BareUrl = "https://api.nextfarm.vn/";
-    String pageLimit = "11";
+    String pageLimit = "20";
     String page = "1";
     public static String token;
 
@@ -42,23 +42,27 @@ public class PushPresenter {
                 if (response.code() == 200) {
                     Example data = response.body();
                     assert data != null;
-                    token = data.getData().getToken();
-                    Call<Example2> call2 = service.getCurrentData("5", pageLimit, page, token);
-                    call2.enqueue(new Callback<Example2>() {
-                        @Override
-                        public void onResponse(Call<Example2> call, Response<Example2> response) {
-                            if (response.code() == 200) {
-                                Example2 data = response.body();
-                                assert data != null;
-                                listener.onLoadDataSuccess(data.getData());
+                    if(data.getData()!=null){
+                        token = data.getData().getToken();
+                        Call<Example2> call2 = service.getCurrentData("127", pageLimit, page, token);
+                        call2.enqueue(new Callback<Example2>() {
+                            @Override
+                            public void onResponse(Call<Example2> call, Response<Example2> response) {
+                                if (response.code() == 200) {
+                                    Example2 data = response.body();
+                                    assert data != null;
+                                    listener.onLoadDataSuccess(data.getData());
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<Example2> call, Throwable t) {
+                            @Override
+                            public void onFailure(Call<Example2> call, Throwable t) {
 
-                        }
-                    });
+                            }
+                        });
+                    }else{
+                        listener.onLoadDataFailure(data.getMeta().getMessage());
+                    }
                 }
             }
 
