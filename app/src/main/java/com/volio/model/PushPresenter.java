@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PushPresenter {
     LoadDataListener listener;
     String BareUrl = "https://api.nextfarm.vn/";
-    String pageLimit = "20";
+    String pageLimit = "50";
     String page = "1";
     public static String token;
 
