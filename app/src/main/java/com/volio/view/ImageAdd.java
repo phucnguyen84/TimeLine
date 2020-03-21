@@ -37,7 +37,7 @@ public class ImageAdd extends AppCompatActivity {
 
     private void initView() {
         viewPagerDetailPhoto = findViewById(R.id.vpDetailPhoto);
-        imgBack=findViewById(R.id.backImg);
+        imgBack = findViewById(R.id.backImg);
     }
 
 

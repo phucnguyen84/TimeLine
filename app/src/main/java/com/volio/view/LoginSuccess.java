@@ -21,10 +21,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginSuccess extends AppCompatActivity implements LoginView{
+public class LoginSuccess extends AppCompatActivity implements LoginView {
 
     MainPresenter mainPresenter;
-    String user,password,code;
+    String user, password, code;
 
     ArrayList<Datum> mDatums = new ArrayList<>();
     RecyclerView recyclerView1;
@@ -46,8 +46,8 @@ public class LoginSuccess extends AppCompatActivity implements LoginView{
         if (bundle != null) {
             data = (List<Datum>) bundle.getSerializable("data");
             user = bundle.getString("user");
-            password=bundle.getString("pass");
-            code=bundle.getString("code");
+            password = bundle.getString("pass");
+            code = bundle.getString("code");
         } else {
             return;
         }
@@ -55,8 +55,8 @@ public class LoginSuccess extends AppCompatActivity implements LoginView{
         postAdapter = new PostAdapter(recyclerView1, this, mDatums);
         recyclerView1.setAdapter(postAdapter);
         addEvents();
-        mainPresenter=new MainPresenter(this);
-        final DataEntered dataEntered=new DataEntered(user,password,code,"");
+        mainPresenter = new MainPresenter(this);
+        final DataEntered dataEntered = new DataEntered(user, password, code, "");
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

@@ -43,13 +43,13 @@ public class MainActivity extends AppCompatActivity implements LoginView {
                 user = edtUser.getText().toString();
                 password = edtPassword.getText().toString();
                 txtNoti.setVisibility(View.VISIBLE);
-                if(code.isEmpty()){
+                if (code.isEmpty()) {
                     txtNoti.setText("*Mã khách hàng không được bỏ trống");
-                }else if(user.isEmpty()){
+                } else if (user.isEmpty()) {
                     txtNoti.setText("*Tài khoản không được bỏ trống");
-                }else if(password.isEmpty()){
+                } else if (password.isEmpty()) {
                     txtNoti.setText("*Mật khẩu không được bỏ trống");
-                }else{
+                } else {
                     progressBar.setVisibility(View.VISIBLE);
                     dataEntered = new DataEntered(user, password, code, "");
                     mainPresenter.loadData(dataEntered);
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements LoginView {
                     public void run() {
                         btnLogin.setEnabled(true);
                     }
-                },1000);
+                }, 1000);
             }
         });
     }
@@ -69,9 +69,9 @@ public class MainActivity extends AppCompatActivity implements LoginView {
         edtCode = findViewById(R.id.edtCode);
         edtUser = findViewById(R.id.edtUser);
         edtPassword = findViewById(R.id.edtPassword);
-        txtNoti=findViewById(R.id.txtNoti);
+        txtNoti = findViewById(R.id.txtNoti);
         btnLogin = findViewById(R.id.btnLogin);
-        progressBar=findViewById(R.id.loadLogin);
+        progressBar = findViewById(R.id.loadLogin);
     }
 
     @Override
@@ -79,9 +79,9 @@ public class MainActivity extends AppCompatActivity implements LoginView {
         Intent intent = new Intent(MainActivity.this, LoginSuccess.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("data", (Serializable) datas);
-        bundle.putString("user",user);
-        bundle.putString("pass",password);
-        bundle.putString("code",code);
+        bundle.putString("user", user);
+        bundle.putString("pass", password);
+        bundle.putString("code", code);
         intent.putExtras(bundle);
         progressBar.setVisibility(View.GONE);
         startActivity(intent);

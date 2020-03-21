@@ -42,7 +42,7 @@ public class PushPresenter {
                 if (response.code() == 200) {
                     Example data = response.body();
                     assert data != null;
-                    if(data.getData()!=null){
+                    if (data.getData() != null) {
                         token = data.getData().getToken();
                         Call<Example2> call2 = service.getCurrentData("127", pageLimit, page, token);
                         call2.enqueue(new Callback<Example2>() {
@@ -60,7 +60,7 @@ public class PushPresenter {
 
                             }
                         });
-                    }else{
+                    } else {
                         listener.onLoadDataFailure(data.getMeta().getMessage());
                     }
                 }

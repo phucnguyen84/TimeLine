@@ -250,7 +250,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             if (json_string == null) {
                 hideViews(viewHolder.ll1, viewHolder.ll2, viewHolder.ll3);
             }
-            View.OnClickListener onClickListener=new View.OnClickListener() {
+            View.OnClickListener onClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ImageAdd.class);
@@ -262,7 +262,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         public void run() {
                             viewHolder.txtPostAdd.setEnabled(true);
                         }
-                    },2000);
+                    }, 2000);
                 }
             };
             viewHolder.imgPost11.setOnClickListener(onClickListener);
@@ -271,22 +271,6 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             viewHolder.imgPost31.setOnClickListener(onClickListener);
             viewHolder.imgPost32.setOnClickListener(onClickListener);
             viewHolder.imgPost33.setOnClickListener(onClickListener);
-//            viewHolder.txtPostAdd.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    img_Post = img[position];
-//                    Intent intent = new Intent(context, ImageAdd.class);
-//                    intent.putExtra("json", json_string);
-//                    v.getContext().startActivity(intent);
-//                    viewHolder.txtPostAdd.setEnabled(false);
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            viewHolder.txtPostAdd.setEnabled(true);
-//                        }
-//                    },2000);
-//                }
-//            });
             viewHolder.txtLike.setText(item.getCountLiked() + " Likes");
             viewHolder.txtLike.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -298,7 +282,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         public void run() {
                             viewHolder.txtLike.setEnabled(true);
                         }
-                    },2000);
+                    }, 2000);
                 }
             });
             viewHolder.txtCmt.setText(item.getCountComments() + " Comments");
@@ -387,7 +371,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         public void run() {
                             viewHolder.btnCmt.setEnabled(true);
                         }
-                    },2000);
+                    }, 2000);
                 }
             });
         } else if (holder instanceof LoadingViewHolder) {
